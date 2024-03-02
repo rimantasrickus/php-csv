@@ -1,2 +1,4 @@
 # php-csv
-CSV reader and writter
+Simple PHP CSV reader and writer
+
+Examples how to use can be found in `tests` folder.
