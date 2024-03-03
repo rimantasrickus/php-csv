@@ -24,10 +24,9 @@ class CsvFileWriter
      */
     public function writeFile(string $filePath, array $data, bool $writeHeader = true, bool $autoHeader = true): int
     {
-        $file = fopen($filePath, 'w');
-        if (!$file) {
-            throw new \RuntimeException("Could not open {$filePath} for writing");
-        }
+        $file = new \SplFileObject($filePath, 'w');
+
+        $file->setCsvControl($this->separator, $this->enclosure, $this->escape);
 
         $len = 0;
         if ($writeHeader) {
@@ -39,14 +38,15 @@ class CsvFileWriter
                 throw new \RuntimeException('CSV header is empty');
             }
 
-            $len += fputcsv($file, $header, $this->separator, $this->enclosure, $this->escape);
+            $len += $file->fputcsv($header, $this->separator, $this->enclosure, $this->escape);
         }
 
         foreach ($data as $line) {
-            $len += fputcsv($file, $line, $this->separator, $this->enclosure, $this->escape);
+            $len += $file->fputcsv($line, $this->separator, $this->enclosure, $this->escape);
         }
 
-        fclose($file);
+        //close file
+        $file = null;
 
         return $len;
     }
