@@ -19,10 +19,7 @@ class CsvFileReader
      */
     public function readFile(string $filePath): array
     {
-        $file = new \SplFileObject($filePath, 'rb');
-
-        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
-        $file->setCsvControl($this->separator, $this->enclosure, $this->escape);
+        $file = $this->getIterator($filePath);
 
         $results = [];
         $header = [];
